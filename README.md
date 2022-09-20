@@ -5,4 +5,4 @@
 
 ## TP1 
 
-Créer une ou plusieurs classes pour gérer les deux dés du jeu Monopoly
+Créer une ou plusieurs classe(s) pour gérer les deux dés du jeu Monopoly
