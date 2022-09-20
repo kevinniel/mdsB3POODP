@@ -1,5 +1,8 @@
 # mdsB3POODP
 
-POO puys Design pattern
+- POO puis Design pattern
+- 1 gros Projet
 
-1 gros Projet
+## TP1 
+
+Créer une ou plusieurs classes pour gérer les deux dés du jeu Monopoly
