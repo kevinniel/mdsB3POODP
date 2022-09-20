@@ -7,7 +7,7 @@
 Créer une ou plusieurs classe(s) pour gérer les deux dés du jeu Monopoly
 
 ## TP2
-Créer une ou plusieurs classe(s) pour gérer des tabourets et des chaises
+Créer une ou plusieurs classe(s) pour gérer des tabourets (couleur, hauteur_pieds, nb_pieds) et des chaises (couleur, hauteur_pieds, nb_pieds, hauteur_dossier)
 
 
 
