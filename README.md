@@ -6,3 +6,10 @@
 ## TP1 
 
 Créer une ou plusieurs classe(s) pour gérer les deux dés du jeu Monopoly
+
+
+
+## Liens utiles
+
+https://en.wikipedia.org/wiki/Design_Patterns
+https://en.wikipedia.org/wiki/Software_design_pattern
