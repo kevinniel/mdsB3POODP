@@ -17,6 +17,8 @@ Créer une ou plusieurs classe(s) pour gérer des tabourets pliables (couleur, h
 4. Ajouter un menu "principal", qui permet de lancer une partie ou de quitter le jeu
 5. Ajouter une base de données (sqlite) a votre projet afin d'enregistrer les parties en cours, et de pouvoir consulter l'historique. Ajouter un choix permettant d'accèder à cet historique dans le menu.
 6. Les parties en cours doivent être enregistrer au fur et à mesure, et tout lancement du programme doit proposer de reprendre l'ancienne partie où elle en était !
+7. Intégrer un design pattern Factory dans votre code
+8. Intégrer un design pattern Singleton dans votre code 
 
 
 
