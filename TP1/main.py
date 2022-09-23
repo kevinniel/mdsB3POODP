@@ -17,7 +17,6 @@ class Dice:
     def set_value(self, value):
         self.__value = value
 
-
 class Dices:
 
     __dice1 = None
@@ -28,6 +27,10 @@ class Dices:
     def __init__(self):
         self.__dice1 = Dice()
         self.__dice2 = Dice()
+        self.roll()
+
+    def __repr__(self):
+        return "ma nouvelle phrase --- dé n°1 : " + str(self.__dice1.get_value()) + ", dé n°2 : " + str(self.__dice2.get_value())
 
     def roll(self):
         self.__dice1.roll()
@@ -51,7 +54,8 @@ class Dices:
         print( self.sum )
 
 d = Dices()
-d.roll()
+print( d )
+# d.roll()
 # d.__dice1.__value = 6
 # d.__dice2.__value = 6
 # print( d.__dice1.__value, d.__dice2.__value )
