@@ -1,14 +1,9 @@
-from pprint import pprint
+# 358 lignes
 import random
 
-class Yams:
 
-    game = None
+class Bcolors:
 
-    def __init__(self):
-        self.game = Game()
-
-class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKCYAN = '\033[96m'
@@ -19,23 +14,22 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-
 class Dice():
 
     nb_face = 6
-
     value = None
 
     def roll(self):
         self.value = random.randint(1, self.nb_face)
 
-
 class Dices():
+
     dices = []
 
     def __init__(self):
         for i in range(0, 5):
             self.dices.append(Dice())
+        # ?????
         self.roll_all()
         
 
@@ -57,12 +51,10 @@ class Dices():
 
         return False
 
-
-class Score:
+class Score():
 
     win = False
-
-    combination = {
+    combinations = {
         "one" : None,
         "two" : None,
         "three" : None,
@@ -79,11 +71,11 @@ class Score:
         "chance" : None
     }  
 
+    # TODO
     def is_all_same( self, dices ):
-        dices_value = []
-        for i in range(0, 5):
-            dices_value.append(dices[i].value)
+        dices_value = self.dices_values_to_array(dices)
 
+        # TODO
         for i in range(1, 7):
             equal_numbers = dices_value.count(i)
             if (equal_numbers == 5):
@@ -91,24 +83,22 @@ class Score:
 
         return False
 
+    # TODO
     def count_number(self, dices, number):
         counter = 0
-
-        dices_value = []
-        for i in range(0, 5):
-            dices_value.append(dices[i].value)
+        dices_value = self.dices_values_to_array(dices)
 
         for n in dices_value:
             if n == number:
-                counter = counter + 1
-        score = counter * number
-        return score
+                counter += 1
+        
+        return counter * number
 
+    # TODO
     def is_brelan( self, dices ):
-        dices_value = []
-        for i in range(0, 5):
-            dices_value.append(dices[i].value)
+        dices_value = self.dices_values_to_array(dices)
 
+        # TODO
         for i in range(1, 7):
             equal_numbers = dices_value.count(i)
             if (equal_numbers >= 3):
@@ -116,11 +106,11 @@ class Score:
 
         return False
 
+    # TODO
     def is_carre( self, dices ):
-        dices_value = []
-        for i in range(0, 5):
-            dices_value.append(dices[i].value)
+        dices_value = self.dices_values_to_array(dices)
 
+        # TODO
         for i in range(1, 7):
             equal_numbers = dices_value.count(i)
             if (equal_numbers >= 4):
@@ -128,231 +118,267 @@ class Score:
 
         return False
 
+    # TODO
     def is_full( self, dices ):
-        equal_three = False
-        equal_two = False
+        is_brelan = False
+        is_pair = False
 
-        dices_value = []
-        for i in range(0, 5):
-            dices_value.append(dices[i].value)
+        dices_value = self.dices_values_to_array(dices)
 
+        # TODO
         for i in range(1, 7):
             equal_numbers = dices_value.count(i)
             if (equal_numbers >= 3):
-                equal_three = True 
+                is_brelan = True 
             elif (equal_numbers >= 2):
-                equal_two = True  
+                is_pair = True
 
-        if (equal_three == True and equal_two == True):
+        if (is_brelan and is_pair):
             return True      
 
         return False
 
+    # TODO
     def is_highest_suite( self, dices ):
-        dices_value = []
-        for i in range(0, 5):
-            dices_value.append(dices[i].value)
-
-        dices_value.sort()
-
-        for i in range(1, 7):
-            equal_numbers = dices_value.count(i)
-            if (equal_numbers > 1):
-                dices_value.remove(i) 
-
-        values_number =  len(dices_value)
-        if (values_number == 5):
-
-            if(dices_value[0]+1 == dices_value[1] and dices_value[1]+1 == dices_value[2] and dices_value[2]+1 == dices_value[3] and dices_value[3]+1 == dices_value[4]):
-
-                return True
+        
+        dices_value = self.__sort_array_dices(dices)
+        print(dices_value)
+        # TODO
+        if([1, 2, 3, 4, 5] in dices_value or [2, 3, 4, 5, 6] in dices_value):
+            return True
 
         return False
 
+    # TODO
     def is_little_suite( self, dices ):
-        dices_value = []
-        for i in range(0, 5):
-            dices_value.append(dices[i].value)
 
-        dices_value.sort()
+        dices_value = self.__sort_array_dices(dices)
 
-        for i in range(1, 7):
-            equal_numbers = dices_value.count(i)
-            if (equal_numbers > 1):
-                dices_value.remove(i) 
-
-        values_number =  len(dices_value)
-        if (values_number == 4):
-
-            if(dices_value[0]+1 == dices_value[1] and dices_value[1]+1 == dices_value[2] and dices_value[2]+1 == dices_value[3]):
-
-                return True
+        # TODO
+        if([1, 2, 3, 4] in dices_value or [2, 3, 4, 5] in dices_value or [3, 4, 5, 6] in dices_value):
+            return True
 
         return False
 
-    def check_win(self):
+    def is_game_ended(self):
 
         self.win = True
 
-        for key in self.combination:
-            if ( self.combination[key] == None ):
+        for key in self.combinations:
+            if ( self.combinations[key] == None ):
                 self.win = False  
 
+    def dices_values_to_array(self, dices):
+        dices_value = []
+        for i in range(0, 5):
+            dices_value.append(dices[i].value)
+        return dices_value
+    
+    def __sort_array_dices(self, dices):
+        dices_values = self.dices_values_to_array(dices)
+        return dices_values.sort()
+
+class Display():
+
+    def display(self, value):
+        print(value)
+
+    def start_game(self):
+        print(Bcolors.HEADER + "Le jeu commence !\n" + Bcolors.ENDC)
+
+    def update_dices(self, x):
+        print(Bcolors.UNDERLINE + Bcolors.BOLD + "\n(" + str(x) + "/3) Quel dées voulez-vous modifiez ? (Ex : '123' ou '135' ou 'no' si vous ne voulez pas terminer vos 3 tours)\n" + Bcolors.ENDC)
+
+    def show_possibilities(self, possibilities):
+        print('\nPossibilitées : ' + str(possibilities) + '\n')
+
+    def show_combinations(self, combinations):
+        for line in combinations:
+            print (Bcolors.WARNING + '--------------------' + Bcolors.ENDC)
+            if (combinations[line] == None):
+                print(Bcolors.WARNING + '|' + line + '|   ' + Bcolors.ENDC)
+            else:
+                print(Bcolors.WARNING + '|' + line + '| ' + str(combinations[line]) + Bcolors.ENDC)
+
+    def sacrifice_case(self):
+        print(Bcolors.UNDERLINE + Bcolors.BOLD + "\nChoisissez une case à sacrifier...\n" + Bcolors.ENDC)
+
+    def sacrifice_empty_case(self):
+        print(Bcolors.UNDERLINE + Bcolors.BOLD + "\nChoisissez une case vide à sacrifier...\n" + Bcolors.ENDC)
+
+    def choose_combination(self):
+        print(Bcolors.UNDERLINE + Bcolors.BOLD + "\nChoisissez la combinaison que vous souhaitez...\n" + Bcolors.ENDC)
+
+    def option_not_available(self):
+        print("Erreur : vous avez déjà choisi cette option, veuillez réessayer !")
+    
+    def option_not_allowed(self):
+        print("Erreur : vous ne pouvez pas choisir cette option, veuillez réessayer !")
+
+    def next_round(self):
+        print(Bcolors.FAIL + "\nProchaine manche !\n" + Bcolors.ENDC)
+
+    def win(self):
+        print(Bcolors.WARNING + "Bravo, vous avez réussi !" + Bcolors.ENDC)
 
 class Game():
-    dices = Dices()
-    print( bcolors.HEADER + "Le jeu commence !\n" + bcolors.ENDC )
-    print( dices )
 
-    score = Score()
-    score.check_win()
-    win = score.win
+    def __init__(self):
+        self.__init_attributes()
+        self.__init_methods()
 
-    first_try = True
+    def __init_attributes(self):
+        self.dices = Dices()
+        self.score = Score()
+        self.display = Display()
 
-    while(win == False):
-        score.check_win()
-        win = score.win
+    def __init_methods(self):
+        self.launch_game()
 
+    def launch_game(self):
+        
+        first_try = self.__init_game()
+
+        while(self.score.win == False):
+            self.start_round(first_try)
+
+        if (self.score.win == True):
+            self.display.win()
+
+    def __init_game(self):
+        self.display.start_game()
+        self.display.display(self.dices)
+        self.score.is_game_ended()
+        return True
+
+    def start_round(self, first_try):
+        self.score.is_game_ended()
         error = False
-
         x=1
         if(first_try == True):
             x = 2
-            
         while(error == False):
-
-            score.check_win()
-            win = score.win
-            
-            ask = str(input( bcolors.UNDERLINE + bcolors.BOLD + "\n(" + str(x) + "/3) Quel dées voulez-vous modifiez ? (Ex : '123' ou '135' ou 'no' si vous ne voulez pas terminer vos 3 tours)\n" + bcolors.ENDC))
-
-            error = dices.roll_indexes(ask)
-            print( dices )
-
+            self.score.is_game_ended()
+            self.display.update_dices(x)
+            ask = str( input() )
+            error = self.dices.roll_indexes(ask)
+            self.display.display(self.dices)
             x += 1
             if(x > 3):
-                score.check_win()
-                win = score.win
-                
-                possibility = []
-
-                if (score.combination["chance"] == None):
-                    possibility.append('chance')
-
-                is_all_same = score.is_all_same( dices.dices )
-                if (is_all_same > 0 and is_all_same < 7):
-                    if (score.combination["yams"] == None):
-                        possibility.append('yams')
-
-                if (score.combination["one"] == None):
-                    possibility.append('one')
-                if (score.combination["two"] == None):
-                    possibility.append('two')
-                if (score.combination["three"] == None):
-                    possibility.append('three')
-                if (score.combination["four"] == None):
-                    possibility.append('four')
-                if (score.combination["five"] == None):
-                    possibility.append('five')
-                if (score.combination["six"] == None):
-                    possibility.append('six')
-
-                is_brelan = score.is_brelan( dices.dices )
-                if (is_brelan != False):
-                    if (score.combination["brelan"] == None):
-                        possibility.append('brelan')
-
-                is_carre = score.is_carre( dices.dices )
-                if (is_carre != False):
-                    if (score.combination["carre"] == None):
-                        possibility.append('carre')
-
-                is_full = score.is_full( dices.dices )
-                if (is_full == True):
-                    if (score.combination["full"] == None):
-                        possibility.append('full')
-
-                is_highest_suite = score.is_highest_suite( dices.dices )
-                if (is_highest_suite == True):
-                    if (score.combination["highest_suite"] == None):
-                        possibility.append('highest_suite')
-                    if (score.combination["little_suite"] == None):
-                        possibility.append('little_suite')
-
-                is_little_suite = score.is_little_suite( dices.dices )
-                if (is_little_suite == True):
-                    if (score.combination["little_suite"] == None):
-                        possibility.append('little_suite')
-
-                print ( '\nPossibilitées : ' + str(possibility) + '\n')
-
-                for line in score.combination:
-                    print ( bcolors.WARNING + '--------------------' + bcolors.ENDC)
-                    if (score.combination[line] == None):
-                        print ( bcolors.WARNING + '|' + line + '|   ' + bcolors.ENDC )
-                    else:
-                        print ( bcolors.WARNING + '|' + line + '| ' + str(score.combination[line]) + bcolors.ENDC )
-
-                if not possibility:
-                    ask_combination = str(input( bcolors.UNDERLINE + bcolors.BOLD + "\nChoisissez une case à sacrifier...\n" + bcolors.ENDC))
-                    while (score.combination[ask_combination] != None):
-                        ask_combination = str(input( bcolors.UNDERLINE + bcolors.BOLD + "\nChoisissez une case vide à sacrifier...\n" + bcolors.ENDC))
-                    score.combination[ask_combination] = 0
+                self.score.is_game_ended()
+                possibilities = self.__get_possibilities()
+                self.display.show_possibilities(possibilities)
+                self.display.show_combinations(self.score.combinations)
+                if not possibilities:
+                    self.display.sacrifice_case()
+                    ask_combination = str(input())
+                    while (self.score.combinations[ask_combination] != None):
+                        self.display.sacrifice_empty_case()
+                        ask_combination = str( input() )
+                    self.score.combinations[ask_combination] = 0
                 else:
-                    ask_combination = str(input( bcolors.UNDERLINE + bcolors.BOLD + "\nChoisissez la combinaison que vous souhaitez...\n" + bcolors.ENDC))
-
-                    while (score.combination[ask_combination] != None):
-                        print("Erreur : vous avez déjà choisi cette option, veuillez réessayer !")
-                        ask_combination = str(input( bcolors.UNDERLINE + bcolors.BOLD + "\nChoisissez la combinaison que vous souhaitez...\n" + bcolors.ENDC))
-
-                    while ask_combination not in possibility:
-                        print("Erreur : vous ne pouvez pas choisir cette option, veuillez réessayer !")
-                        ask_combination = str(input( bcolors.UNDERLINE + bcolors.BOLD + "\nChoisissez la combinaison que vous souhaitez...\n" + bcolors.ENDC))
-                
-                dices_value = []
-                for i in range(0, 5):
-                    dices_value.append(dices.dices[i].value)
-                dices_sum = sum(dices_value)
-
-                if (score.combination[ask_combination] == None):
-                    if (ask_combination == "one"):
-                        count = score.count_number(dices.dices, 1)
-                        score.combination[ask_combination] = count
-                    elif (ask_combination == "two"):
-                        count = score.count_number(dices.dices, 2)
-                        score.combination[ask_combination] = count
-                    elif (ask_combination == "three"):
-                        count = score.count_number(dices.dices, 3)
-                        score.combination[ask_combination] = count
-                    elif (ask_combination == "four"):
-                        count = score.count_number(dices.dices, 4)
-                        score.combination[ask_combination] = count
-                    elif (ask_combination == "five"):
-                        count = score.count_number(dices.dices, 5)
-                        score.combination[ask_combination] = count
-                    elif (ask_combination == "six"):
-                        count = score.count_number(dices.dices, 6)
-                        score.combination[ask_combination] = count
-                    elif (ask_combination == "brelan"):
-                        score.combination[ask_combination] = is_brelan
-                    elif (ask_combination == "carre"):
-                        score.combination[ask_combination] = is_carre
-                    elif (ask_combination == "full"):
-                        score.combination[ask_combination] = 25
-                    elif (ask_combination == "little_suite"):
-                        score.combination[ask_combination] = 30
-                    elif (ask_combination == "highest_suite"):
-                        score.combination[ask_combination] = 40
-                    elif (ask_combination == "yams"):
-                        score.combination[ask_combination] = 50
-                    elif (ask_combination == "chance"):
-                        score.combination[ask_combination] = dices_sum
-
-                print ( bcolors.FAIL + "\nProchaine manche !\n" + bcolors.ENDC )
-                dices.roll_all()
-                print( dices )
+                    self.display.choose_combination()
+                    ask_combination = str(input())
+                    while (self.score.combinations[ask_combination] != None):
+                        self.display.option_not_available()
+                        self.display.choose_combination()
+                        ask_combination = str( input() )
+                    while ask_combination not in possibilities:
+                        self.display.option_not_allowed()
+                        self.display.choose_combination()
+                        ask_combination = str( input() )
+                if (self.score.combinations[ask_combination] == None):
+                    self.__set_scores(ask_combination)
+                self.display.next_round()
+                self.dices.roll_all()
+                self.display.display(self.dices)
                 break
 
-    if (win == True):
-        print ( bcolors.WARNING + "Bravo, vous avez réussi !" + bcolors.ENDC )
+    def __get_possibilities(self):
+        possibilities = []
+
+        if (self.score.combinations["chance"] == None):
+            possibilities.append('chance')
+
+        is_all_same = self.score.is_all_same( self.dices.dices )
+        if (is_all_same > 0 and is_all_same < 7):
+            if (self.score.combinations["yams"] == None):
+                possibilities.append('yams')
+
+        if (self.score.combinations["one"] == None):
+            possibilities.append('one')
+        if (self.score.combinations["two"] == None):
+            possibilities.append('two')
+        if (self.score.combinations["three"] == None):
+            possibilities.append('three')
+        if (self.score.combinations["four"] == None):
+            possibilities.append('four')
+        if (self.score.combinations["five"] == None):
+            possibilities.append('five')
+        if (self.score.combinations["six"] == None):
+            possibilities.append('six')
+
+        is_brelan = self.score.is_brelan( self.dices.dices )
+        if (is_brelan != False):
+            if (self.score.combinations["brelan"] == None):
+                possibilities.append('brelan')
+
+        is_carre = self.score.is_carre( self.dices.dices )
+        if (is_carre != False):
+            if (self.score.combinations["carre"] == None):
+                possibilities.append('carre')
+
+        is_full = self.score.is_full( self.dices.dices )
+        if (is_full == True):
+            if (self.score.combinations["full"] == None):
+                possibilities.append('full')
+
+        is_highest_suite = self.score.is_highest_suite( self.dices.dices )
+        if (is_highest_suite == True):
+            if (self.score.combinations["highest_suite"] == None):
+                possibilities.append('highest_suite')
+            if (self.score.combinations["little_suite"] == None):
+                possibilities.append('little_suite')
+
+        is_little_suite = self.score.is_little_suite( self.dices.dices )
+        if (is_little_suite == True):
+            if (self.score.combinations["little_suite"] == None):
+                possibilities.append('little_suite')
+        
+        return possibilities
+
+    def __set_scores(self, ask_combination):
+        if (ask_combination == "one"):
+            count = self.score.count_number(self.dices.dices, 1)
+            self.score.combinations[ask_combination] = count
+        elif (ask_combination == "two"):
+            count = self.score.count_number(self.dices.dices, 2)
+            self.score.combinations[ask_combination] = count
+        elif (ask_combination == "three"):
+            count = self.score.count_number(self.dices.dices, 3)
+            self.score.combinations[ask_combination] = count
+        elif (ask_combination == "four"):
+            count = self.score.count_number(self.dices.dices, 4)
+            self.score.combinations[ask_combination] = count
+        elif (ask_combination == "five"):
+            count = self.score.count_number(self.dices.dices, 5)
+            self.score.combinations[ask_combination] = count
+        elif (ask_combination == "six"):
+            count = self.score.count_number(self.dices.dices, 6)
+            self.score.combinations[ask_combination] = count
+        elif (ask_combination == "brelan"):
+            self.score.combinations[ask_combination] = self.score.is_brelan(self.dices)
+        elif (ask_combination == "carre"):
+            self.score.combinations[ask_combination] = self.score.is_carre(self.dices)
+        elif (ask_combination == "full"):
+            self.score.combinations[ask_combination] = 25
+        elif (ask_combination == "little_suite"):
+            self.score.combinations[ask_combination] = 30
+        elif (ask_combination == "highest_suite"):
+            self.score.combinations[ask_combination] = 40
+        elif (ask_combination == "yams"):
+            self.score.combinations[ask_combination] = 50
+        elif (ask_combination == "chance"):
+            self.score.combinations[ask_combination] = sum(self.score.dices_values_to_array(self.dices.dices))
+
+Game()
